@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Hanif Gul Blog Editor!</title>
+<style>
+  :root {
+    --primary: #0077b6;
+    --secondary: #023e8a;
+    --accent: #90e0ef;
+    --light: #eef2f3;
+    --dark: #333;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--light);
+    line-height: 1.6;
+  }
+  
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+  }
+  
+  #blog-title {
+    margin: 0;
+    font-size: 2.5rem;
+    outline: none;
+    min-height: 1.2em;
+  }
+  
+  #toolbar {
+    background: var(--secondary);
+    padding: 10px 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  #toolbar button, 
+  #toolbar select, 
+  #toolbar input[type="color"] {
+    background: var(--accent);
+    border: none;
+    border-radius: 5px;
+    padding: 8px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  #toolbar button:hover {
+    background: var(--primary);
+    color: white;
+  }
+  
+  #toolbar select {
+    min-width: 110px;
+  }
+  
+  #editor-container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  #editor {
+    min-height: 500px;
+    padding: 30px;
+    outline: none;
+    font-size: 1.1rem;
+  }
+  
+  #editor:empty:before {
+    content: "Start writing your blog post here...";
+    color: #999;
+  }
+  
+  #status {
+    text-align: center;
+    padding: 5px;
+    font-size: 0.9rem;
+    color: #666;
+    border-top: 1px solid #eee;
+  }
+  
+  #footer {
+    text-align: center;
+    margin: 40px 0 20px;
+    color: #555;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="w3-container w3-padding-32 w3-white w3-center">
+        <h1 class="w3-xxxlarge usr-main-caption" tabindex="0">Muhammad Hanif Gul Blog Editor!</h1>
+        <p class="w3-large">Public Service Enthsuiast! <span class="w3-tag"> Transport Specialist</span></p>
+      </div>
+</header>
+
+<div id="toolbar">
+  <!-- Text Formatting -->
+  <button data-command="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+  <button data-command="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+  <button data-command="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+  
+  <!-- Headings -->
+  <select data-command="formatBlock" title="Heading/Paragraph">
+    <option value="p">Paragraph</option>
+    <option value="h1">Heading 1</option>
+    <option value="h2">Heading 2</option>
+    <option value="h3">Heading 3</option>
+  </select>
+  
+  <!-- Lists -->
+  <button data-command="insertUnorderedList" title="Bullet List">• List</button>
+  <button data-command="insertOrderedList" title="Numbered List">1. List</button>
+  
+  <!-- Blockquote -->
+  <button data-command="formatBlock" data-value="blockquote" title="Blockquote">❝ Quote</button>
+  
+  <!-- Links/Images -->
+  <button data-command="createLink" title="Insert Link (Ctrl+K)">Link</button>
+  <button data-command="insertImage" title="Insert Image">Image</button>
+  
+  <!-- Colors -->
+  <input type="color" id="textColor" title="Text Color" value="#000000">
+  <input type="color" id="bgColor" title="Background Color" value="#ffffff">
+  
+  <!-- Alignment -->
+  <button data-command="justifyLeft" title="Align Left">⎸ Left</button>
+  <button data-command="justifyCenter" title="Center">⎸ Center ⎸</button>
+  <button data-command="justifyRight" title="Align Right">Right ⎸</button>
+  
+  <!-- Undo/Redo -->
+  <button data-command="undo" title="Undo (Ctrl+Z)">↩ Undo</button>
+  <button data-command="redo" title="Redo (Ctrl+Y)">↪ Redo</button>
+  
+  <!-- Save/Load -->
+  <button id="save-btn" title="Save Blog (Ctrl+S)">💾 Save</button>
+  <button id="load-btn" title="Load Blog">📂 Load</button>
+  
+  <!-- Clear Formatting -->
+  <button data-command="removeFormat" title="Clear Formatting">✕ Clear Format</button>
+</div>
+
+<div id="editor-container">
+  <div id="editor" contenteditable="true" spellcheck="true"></div>
+  <div id="status">Ready</div>
+</div>
+
+<div id="footer">Muhammad Hanif Gul Blog Editor!</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const editor = document.getElementById('editor');
+    const blogTitle = document.getElementById('blog-title');
+    const status = document.getElementById('status');
+    const toolbar = document.getElementById('toolbar');
+    const textColor = document.getElementById('textColor');
+    const bgColor = document.getElementById('bgColor');
+    
+    // Initialize editor with placeholder
+    if (editor.innerHTML.trim() === '') {
+      editor.innerHTML = '<p>Start writing your blog post here...</p>';
+    }
+    
+    // Toolbar button handling
+    toolbar.addEventListener('click', function(e) {
+      const btn = e.target.closest('[data-command]');
+      if (!btn) return;
+      
+      const command = btn.dataset.command;
+      const value = btn.dataset.value || (btn.value && btn.value !== '#' ? btn.value : null);
+      
+      if (command === 'createLink') {
+        insertLink();
+      } else if (command === 'insertImage') {
+        insertImage();
+      } else if (command === 'foreColor' || command === 'hiliteColor') {
+        // Handle color changes
+        const color = command === 'foreColor' ? textColor.value : bgColor.value;
+        execCommand(command, color);
+      } else {
+        execCommand(command, value);
+      }
+    });
+    
+    // Color picker changes
+    textColor.addEventListener('input', function() {
+      execCommand('foreColor', textColor.value);
+    });
+    
+    bgColor.addEventListener('input', function() {
+      execCommand('hiliteColor', bgColor.value);
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && !e.altKey && !e.metaKey) {
+        switch (e.key.toLowerCase()) {
+          case 'b': e.preventDefault(); execCommand('bold'); break;
+          case 'i': e.preventDefault(); execCommand('italic'); break;
+          case 'u': e.preventDefault(); execCommand('underline'); break;
+          case 'k': e.preventDefault(); insertLink(); break;
+          case 's': e.preventDefault(); saveContent(); break;
+          case 'z': e.preventDefault(); execCommand(e.shiftKey ? 'redo' : 'undo'); break;
+        }
+      }
+    });
+    
+    // Save/Load buttons
+    document.getElementById('save-btn').addEventListener('click', saveContent);
+    document.getElementById('load-btn').addEventListener('click', loadContent);
+    
+    // Auto-save every 30 seconds
+    setInterval(() => {
+      if (document.activeElement === editor || document.activeElement === blogTitle) {
+        saveContent(true);
+      }
+    }, 30000);
+    
+    // Show current formatting in status bar
+    editor.addEventListener('input', updateStatus);
+    editor.addEventListener('click', updateStatus);
+    editor.addEventListener('keyup', updateStatus);
+    
+    // Load any saved content
+    loadContent(true);
+  });
+  
+  // Execute command with error handling
+  function execCommand(command, value = null) {
+    try {
+      const success = document.execCommand(command, false, value);
+      if (!success) {
+        showStatus(`Command "${command}" not supported`, 'error');
+      }
+      return success;
+    } catch (error) {
+      showStatus(`Error executing "${command}": ${error.message}`, 'error');
+      return false;
+    }
+  }
+  
+  // Insert link with URL validation
+  function insertLink() {
+    const selection = window.getSelection();
+    if (!selection.toString().trim()) {
+      showStatus('Please select text to link', 'warning');
+      return;
+    }
+    
+    const url = prompt("Enter the URL:", "https://");
+    if (url && url !== "https://") {
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        showStatus('URL should start with http:// or https://', 'warning');
+        return;
+      }
+      execCommand('createLink', url);
+    }
+  }
+  
+  // Insert image with URL validation
+ // Function to handle image upload
+function insertImage() {
+  // Create a file input element
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  
+  // When a file is selected
+  fileInput.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Create a FileReader to read the image file
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      // Create an image element and insert it into the editor
+      const img = document.createElement('img');
+      img.src = event.target.result;
+      img.style.maxWidth = '100%';
+      
+      // Insert the image at the current cursor position
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(img);
+      } else {
+        document.getElementById('editor').appendChild(img);
+      }
+      
+      // Focus back on the editor
+      document.getElementById('editor').focus();
+    };
+    reader.readAsDataURL(file);
+  };
+  
+  // Trigger the file selection dialog
+  fileInput.click();
+}
+
+// Update your toolbar button to use this function
+document.querySelector('[data-command="insertImage"]').onclick = insertImage;
+  
+  // Save content to localStorage
+  function saveContent(silent = false) {
+    try {
+      const data = {
+        title: document.getElementById('blog-title').innerHTML,
+        content: document.getElementById('editor').innerHTML,
+        textColor: document.getElementById('textColor').value,
+        bgColor: document.getElementById('bgColor').value,
+        timestamp: new Date().toISOString()
+      };
+      
+      localStorage.setItem('blogEditorContent', JSON.stringify(data));
+      if (!silent) {
+        showStatus('Blog saved locally', 'success');
+      }
+      return true;
+    } catch (error) {
+      showStatus('Failed to save: ' + error.message, 'error');
+      return false;
+    }
+  }
+  
+  // Load content from localStorage
+  function loadContent(silent = false) {
+    try {
+      const saved = localStorage.getItem('blogEditorContent');
+      if (saved) {
+        const data = JSON.parse(saved);
+        document.getElementById('blog-title').innerHTML = data.title || 'Muhammad Hanif Gul Blog Editor!';
+        document.getElementById('editor').innerHTML = data.content || '<p>Start writing your blog post here...</p>';
+        document.getElementById('textColor').value = data.textColor || '#000000';
+        document.getElementById('bgColor').value = data.bgColor || '#ffffff';
+        if (!silent) {
+          showStatus('Blog loaded from local storage', 'success');
+        }
+        return true;
+      } else if (!silent) {
+        showStatus('No saved blog found', 'info');
+      }
+      return false;
+    } catch (error) {
+      showStatus('Failed to load: ' + error.message, 'error');
+      return false;
+    }
+  }
+  
+  // Update status bar with current formatting
+  function updateStatus() {
+    const formatStatus = [];
+    if (document.queryCommandState('bold')) formatStatus.push('Bold');
+    if (document.queryCommandState('italic')) formatStatus.push('Italic');
+    if (document.queryCommandState('underline')) formatStatus.push('Underline');
+    
+    const blockElement = document.queryCommandValue('formatBlock');
+    if (blockElement && blockElement !== 'p') {
+      formatStatus.push(blockElement.toUpperCase());
+    }
+    
+    const statusText = formatStatus.length > 0 
+      ? `Formatting: ${formatStatus.join(', ')}` 
+      : 'Ready';
+    
+    showStatus(statusText);
+  }
+  
+  // Show status message
+  function showStatus(message, type = 'info') {
+    const status = document.getElementById('status');
+    status.textContent = message;
+    status.style.color = 
+      type === 'error' ? '#d32f2f' :
+      type === 'success' ? '#388e3c' :
+      type === 'warning' ? '#ffa000' : '#666';
+  }
+</script>
+</body>
+</html>
