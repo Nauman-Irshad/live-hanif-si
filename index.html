@@ -77,7 +77,7 @@ Victor got his BA and MA in English literature. Later, he went to Yale Universit
             <a href="#" id="toggleBlog" style="display: none; color: blue; cursor: pointer; user-select: none;">See more</a>
             
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-            <h1 id="editBlogBtn" style="cursor: pointer; margin-top: 25px;">
+            <h1 id="editBlogBtnn" style="cursor: pointer; margin-top: 25px;">
               Edit blog <i class="fas fa-pen-to-square" style="font-size: 0.9em;"></i>
             </h1>
           </header>
@@ -167,34 +167,6 @@ Let’s build a future where we are empowered, skilled, and unstoppable.
    <!-- Font Awesome for the edit icon -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <script>
-  document.getElementById('editBlogBtn2').addEventListener('click', function () {
-    const password = prompt('Enter Muhammad Hanif bin password to edit the blog:');
-
-    if (password === null) return; // User cancelled
-
-    if (password === 'hanif123') {
-      window.location.href = 'blogedit.html';
-    } else {
-      alert('Incorrect password!');
-    }
-  });
-</script>
-
-<script>
-  document.getElementById('editBlogBtn1').addEventListener('click', function () {
-    const password = prompt('Enter Muhammad Hanif bin password to edit the blog:');
-
-    if (password === null) return; // User cancelled
-
-    if (password === 'hanif123') {
-      window.location.href = 'blogedit.html';
-    } else {
-      alert('Incorrect password!');
-    }
-  });
-</script>
-
-<script>
   document.getElementById('editBlogBtnn').addEventListener('click', function () {
     const password = prompt('Enter Muhammad Hanif bin password to edit the blog:');
 
@@ -207,6 +179,8 @@ Let’s build a future where we are empowered, skilled, and unstoppable.
     }
   });
 </script>
+
+
 
            
 <script>
@@ -243,7 +217,7 @@ Let’s build a future where we are empowered, skilled, and unstoppable.
         return;
       }
 
-      if (password === 'hanifb123') {
+      if (password === 'hanif123') {
         // Correct password, go to edit page
         window.location.href = 'blogedit.html';
       } else {
@@ -402,6 +376,11 @@ loadComments();
     &copy; 2025 Github
   </div>
 </footer>
+
+ 
+
+
+
     </div>
   </main>
 </body>
