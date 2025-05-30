@@ -100,7 +100,7 @@ Victor got his BA and MA in English literature. Later, he went to Yale Universit
             </h2>
             
             <!-- Blog content with see more/less -->
-            <p id="blogContent" style="overflow: hidden; max-height: 4.5em; line-height: 1.5em; position: relative;">
+            <p id="editBlogBtn2" style="overflow: hidden; max-height: 4.5em; line-height: 1.5em; position: relative;">
               STEM-The Real Guarantor of National Security:
 Pakistan is passing through a historic moment of self reflection, self awareness and possibly of course correction. Interestingly, this desire is not fueled by some kind of doubt about the viability of her statehood. On the contrary, this renewed quest for soul searching is  triggered by the euphoric feelings of victory in a historic air battle on the May 7th. Modi, a hardliner Indian PM, who thrives on hatred, division and violence attacked Pakistan with the false assumption that India could beat Pakistan under pseudo pretext of terrorism and would get away with strong retaliation from Pakistan. This false pride of Modi was shattered in the air. The narrative of Indian hegemony has fallen sooner than the big birds in the sky. 
 The feelings of victory are sweet. The enhanced sense of security that Pakistanis enjoy now is super fine. But the real battlefield is neither ground, nor air, nor oceans. The battles of future are won and lost in the class rooms of STEM schools and Institutes of Technologies. If Pakistan doesn’t redefine her security doctrine to include this aspect in to the full spectrum of deterrence, Pakistan will never become a high-tech top economy. Without a strong economy, the future warfare can never be conceptualised as it is heavily influenced by electronic warfare. Pakistan is at the bottom of the ladder. It is necessary that educational emergency is imposed across the country in both public and private sector for making Pakistan a first world country by 2047. 
@@ -115,7 +115,7 @@ If Pakistan wants to be an active and respectable participant in the emerging wo
             </p>  <a href="#" id="toggleBlog" style="display: none; color: blue; cursor: pointer; user-select: none;">See more</a>
             
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-            <h1 id="editBlogBtn" style="cursor: pointer; margin-top: 25px;">
+            <h1 id="editBlogBtn2" style="cursor: pointer; margin-top: 25px;">
               Edit blog <i class="fas fa-pen-to-square" style="font-size: 0.9em;"></i>
             </h1>
           </header>
@@ -140,7 +140,7 @@ If Pakistan wants to be an active and respectable participant in the emerging wo
         
             
             <!-- Blog content with see more/less -->
-            <p id="blogContent" style="overflow: hidden; max-height: 4.5em; line-height: 1.5em; position: relative;">
+            <p id="editBlogBtn1" style="overflow: hidden; max-height: 4.5em; line-height: 1.5em; position: relative;">
              Invest in Yourself,  The Return of Investment (ROI) is Infinite! 
 In a world that's changing faster than ever, your greatest asset is YOU.
 Every new skill you learn, every challenge you embrace, and every time you push your boundaries, you're building capacity, not just for yourself, but for your community too.
@@ -154,7 +154,7 @@ Let’s build a future where we are empowered, skilled, and unstoppable.
           </p>  <a href="#" id="toggleBlog1" style="display: none; color: blue; cursor: pointer; user-select: none;">See more</a>
             
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-            <h1 id="editBlogBtn" style="cursor: pointer; margin-top: 25px;">
+            <h1 id="editBlogBtn1" style="cursor: pointer; margin-top: 25px;">
               Edit blog <i class="fas fa-pen-to-square" style="font-size: 0.9em;"></i>
             </h1>
           </header>
@@ -164,45 +164,97 @@ Let’s build a future where we are empowered, skilled, and unstoppable.
   </div>
 </main>
 
-   
-           
+   <!-- Font Awesome for the edit icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <script>
-  const blogContent = document.getElementById('blogContent');
-  const toggleLink = document.getElementById('toggleBlog');
-  const maxHeight = 4.5 * 1.5; // approx 3 lines (4.5em with 1.5 line height)
-
-  // Check if content is taller than maxHeight, then show "See more"
-  if (blogContent.scrollHeight > blogContent.clientHeight) {
-    toggleLink.style.display = 'inline';
-  }
-
-  toggleLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (toggleLink.textContent === 'See more') {
-      blogContent.style.maxHeight = 'none';
-      toggleLink.textContent = 'See less';
-    } else {
-      blogContent.style.maxHeight = maxHeight + 'em';
-      toggleLink.textContent = 'See more';
-    }
-  });
-
-  // Edit blog button click handler
-  document.getElementById('editBlogBtn').addEventListener('click', () => {
-    window.location.href = 'blogedit.html'; // or your edit page path
-  });
-</script>
-
-<script>
-  document.getElementById('editBlogBtn').addEventListener('click', function() {
+  document.getElementById('editBlogBtn2').addEventListener('click', function () {
     const password = prompt('Enter Muhammad Hanif bin password to edit the blog:');
-    if (password === 'hanifb123') {
+
+    if (password === null) return; // User cancelled
+
+    if (password === 'hanif123') {
       window.location.href = 'blogedit.html';
-    } else if (password !== null) {
+    } else {
       alert('Incorrect password!');
     }
   });
 </script>
+
+<script>
+  document.getElementById('editBlogBtn1').addEventListener('click', function () {
+    const password = prompt('Enter Muhammad Hanif bin password to edit the blog:');
+
+    if (password === null) return; // User cancelled
+
+    if (password === 'hanif123') {
+      window.location.href = 'blogedit.html';
+    } else {
+      alert('Incorrect password!');
+    }
+  });
+</script>
+
+<script>
+  document.getElementById('editBlogBtnn').addEventListener('click', function () {
+    const password = prompt('Enter Muhammad Hanif bin password to edit the blog:');
+
+    if (password === null) return; // User cancelled
+
+    if (password === 'hanif123') {
+      window.location.href = 'blogedit.html';
+    } else {
+      alert('Incorrect password!');
+    }
+  });
+</script>
+
+           
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const blogContent = document.getElementById('blogContent');
+    const toggleLink = document.getElementById('toggleBlog');
+    const editBlogBtn = document.getElementById('editBlogBtn');
+
+    const maxHeight = 4.5 * 1.5; // approx 3 lines in em units
+
+    // Check if content needs "See more"
+    if (blogContent.scrollHeight > blogContent.clientHeight) {
+      toggleLink.style.display = 'inline';
+    }
+
+    // Toggle See more / See less
+    toggleLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (toggleLink.textContent === 'See more') {
+        blogContent.style.maxHeight = 'none';
+        toggleLink.textContent = 'See less';
+      } else {
+        blogContent.style.maxHeight = maxHeight + 'em';
+        toggleLink.textContent = 'See more';
+      }
+    });
+
+    // Handle Edit blog button click
+    editBlogBtn.addEventListener('click', function () {
+      const password = prompt('Enter Muhammad Hanif bin password to edit the blog:');
+
+      if (password === null) {
+        // User pressed cancel
+        return;
+      }
+
+      if (password === 'hanifb123') {
+        // Correct password, go to edit page
+        window.location.href = 'blogedit.html';
+      } else {
+        // Wrong password, stay on page
+        alert('Incorrect password!');
+      }
+    });
+  });
+</script>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -350,11 +402,6 @@ loadComments();
     &copy; 2025 Github
   </div>
 </footer>
-
- 
-
-
-
     </div>
   </main>
 </body>
